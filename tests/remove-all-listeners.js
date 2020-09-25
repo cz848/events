@@ -52,8 +52,10 @@ function expect(expected) {
   var barListeners = ee.listeners('bar');
   var bazListeners = ee.listeners('baz');
   ee.on('removeListener', expect(['bar', 'baz', 'baz']));
-  ee.removeAllListeners('bar');
-  ee.removeAllListeners('baz');
+  // ee.removeAllListeners('bar');
+  // ee.removeAllListeners('baz');
+  ee.offAll('bar');
+  ee.offAll('baz');
 
   var listeners = ee.listeners('foo');
   assert.ok(Array.isArray(listeners));
@@ -88,7 +90,8 @@ function expect(expected) {
   // Expect LIFO order
   ee.on('removeListener', expect(['foo', 'bar', 'removeListener']));
   ee.on('removeListener', expect(['foo', 'bar']));
-  ee.removeAllListeners();
+  // ee.removeAllListeners();
+  ee.offAll();
 
   var listeners = ee.listeners('foo');
   assert.ok(Array.isArray(listeners));
@@ -104,7 +107,8 @@ function expect(expected) {
   // Check for regression where removeAllListeners() throws when
   // there exists a 'removeListener' listener, but there exists
   // no listeners for the provided event type.
-  assert.doesNotThrow(function () { ee.removeAllListeners(ee, 'foo') });
+  // assert.doesNotThrow(function () { ee.removeAllListeners(ee, 'foo') });
+  assert.doesNotThrow(function () { ee.offAll(ee, 'foo') });
 }
 
 {
@@ -117,17 +121,20 @@ function expect(expected) {
   ee.on('baz', common.mustNotCall());
   ee.on('baz', common.mustNotCall());
   assert.strictEqual(ee.listeners('baz').length, expectLength + 1);
-  ee.removeAllListeners('baz');
+  // ee.removeAllListeners('baz');
+  ee.offAll('baz');
   assert.strictEqual(ee.listeners('baz').length, 0);
 }
 
 {
   var ee = new events.EventEmitter();
-  assert.strictEqual(ee, ee.removeAllListeners());
+  // assert.strictEqual(ee, ee.removeAllListeners());
+  assert.strictEqual(ee, ee.offAll());
 }
 
 {
   var ee = new events.EventEmitter();
   ee._events = undefined;
-  assert.strictEqual(ee, ee.removeAllListeners());
+  // assert.strictEqual(ee, ee.removeAllListeners());
+  assert.strictEqual(ee, ee.offAll());
 }

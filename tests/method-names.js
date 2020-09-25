@@ -28,8 +28,9 @@ var E = events.EventEmitter.prototype;
 assert.strictEqual(E.constructor.name, 'EventEmitter');
 assert.strictEqual(E.on, E.addListener);  // Same method.
 assert.strictEqual(E.off, E.removeListener);  // Same method.
+assert.strictEqual(E.offAll, E.removeAllListeners);  // Same method.
 Object.getOwnPropertyNames(E).forEach(function(name) {
-  if (name === 'constructor' || name === 'on' || name === 'off') return;
+  if (name === 'constructor' || name === 'on' || name === 'off' || name === 'offAll') return;
   if (typeof E[name] !== 'function') return;
   assert.strictEqual(E[name].name, name);
 });
